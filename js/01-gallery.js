@@ -42,15 +42,14 @@ const instance = basicLightbox.create(`
      src="${urlLargeImage}" 
      width="800" height="600">
 `, {
-  onShow: (instance) => {window.addEventListener("keyup", escapeClose)}
+  onShow: (instance) => {window.addEventListener('keydown', escapeClose)}
 })
 
 instance.show()
 
 function escapeClose(evt) {
-  if(evt.key === "Escape") {
+  if(evt.key === 'Escape') {
       instance.close()
-      window.removeEventListener("keyup", escapeClose)
   }
 }
 }
