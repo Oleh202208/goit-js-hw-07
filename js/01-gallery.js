@@ -1,53 +1,56 @@
 import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
-console.log(galleryItems);
+// console.log(galleryItems);
 
-const galleryEl = document.querySelector('.gallery');
-console.log(galleryEl);
+const galleryContainer = document.querySelector('.gallery');
+const imagesMarkup = creatImagsGallery(galleryItems);
+galleryContainer.insertAdjacentHTML('beforeend', imagesMarkup);
 
-function creatImagsGalleryMarkup(){
-  return galleryItems.map(({preview, original, description})=> {
-    return 
-    `<div class="gallery__item">
-// <a class="gallery__link" href="${original}">
-//   <img
-//     class="gallery__image"
-//     src="${preview}"
-//     data-source="${original}"
-//     alt="${description}"
-//   />
-// </a>
-// </div>`;
-  }).join('');
+
+
+function creatImagsGallery(galleryItems){
+  return galleryItems
+  .map(({preview, original, description }) => {
+    return `<div class="gallery__item">
+ <a class="gallery__link" href="${original}">
+   <img
+    class="gallery__image"
+     src="${preview}"
+     data-source="${original}"
+     alt="${description}"
+   />
+ </a>
+ </div>`;
+  })
+  .join('');
 }
-// console.log()
-console.log(creatImagsGalleryMarkup());
 
+galleryContainer.addEventListener('click', onGalleryContainerClick);
 
+function onGalleryContainerClick(evt) {
+  evt.preventDefault()
+if(!evt.target.classList.contains('gallery__image')) {
+  return;
+}
 
-// const galleryEl = document.querySelector('.gallery');
-// // console.log(galleryEl);
+const urlLargeImage = evt.target.getAttribute('data-source');
 
-// const galleryMarkup = creatImagsGalleryMarkup(picture);
-// console.log(galleryMarkup);
+const instance = basicLightbox.create(`
+    <img
+    class="gallery__image"
+     src="${urlLargeImage}" 
+     width="800" height="600">
+`, {
+  onShow: (instance) => {window.addEventListener("keyup", escapeClose)}
+})
 
-// galleryEl.insertAdjacentHTML('beforeend', galleryMarkup);
+instance.show()
 
-// function creatImagsGalleryMarkup(galleryItems) {
-// return galleryItems.map(({preview, original, description}) => {
-//     return
-// `<div class="gallery__item">
-// <a class="gallery__link" href="${original}">
-//   <img
-//     class="gallery__image"
-//     src="${preview}"
-//     data-source="${original}"
-//     alt="${description}"
-//   />
-// </a>
-// </div>`;
-// }).join('');
-
-// }
-// console.log(creatImagsGalleryMarkup(picture));
+function escapeClose(evt) {
+  if(evt.key === "Escape") {
+      instance.close()
+      window.removeEventListener("keyup", escapeClose)
+  }
+}
+}
