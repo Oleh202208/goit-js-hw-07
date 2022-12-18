@@ -50,6 +50,7 @@ instance.show()
 function escapeClose(evt) {
   if(evt.key === 'Escape') {
       instance.close()
+      window.removeEventListener('keydown', escapeClose)
   }
 }
 }
